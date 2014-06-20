@@ -1,159 +1,27 @@
-nprapps' Project Template
-=========================
+Manual de Periodismo de Datos Iberoamericano
+============================================
+Repositorio Github para reportar Issues del proceso de escritura colaborativa del Manual de Periodismo de Datos Iberoamericano.
 
-* [About this template](#about-this-template)
-* [What's in here?](#whats-in-here)
-* [Copy the template](#copy-the-template)
-* [Configure the project](#configure-the-project)
-* [Install requirements](#install-requirements)
-* [Project secrets](#project-secrets)
-* [Bootstrap issues](#bootstrap-issues)
-* [Generate index.html](#generate-indexhtml)
-* [Adding a template/view](#adding-a-templateview)
-* [Run the project locally](#run-the-project-locally)
-* [Run javascript tests](#run-javascript-tests)
-* [Compile static assets](#compile-static-assets)
-* [Test the rendered app](#test-the-rendered-app)
-* [Deploy to S3](#deploy-to-s3)
-* [Deploy to EC2](#deploy-to-ec2)
+El Manual de Periodismo de Datos Iberoamericano es un tutorial en español creado de forma colaborativa, sobre cómo desarrollar periodismo de datos
 
-About this template
--------------------
+Es una guía práctica que entrega las herramientas necesarias para ejercer control ciudadano y periodístico sobre las autoridades de manera segura, a través del uso de datos públicos.
 
-This template provides a a project skeleton suitable for any project that is to be served entirely as flat files. Facilities are provided for rendering html from data, compiling LESS into CSS, deploying to S3, etc. (It actually supports deploying to servers too, but that's less well-tested.)
+Es un documento que retrata el estado de situación en temas de transparencia y acceso a la información, en cada uno de los países de Iberoamerica; la región con mayor tasa de periodistas asesinados en el mundo.
 
-What's in here?
----------------
+Es un compendio de las herramientas digitales que permiten sortear de manera segura, cercos informativos y la ausencia de marcos legales que aseguren el libre acceso a la información, así como sacar provecho de cuando esa legalidad existe. Herramientas que permiten además, cruzar diferentes bases de datos para detectar temas de relevancia social, así como generar bases de datos propias que facilitan el trabajo periodístico.
 
-The project contains the following folders and important files:
+Es una guía útil orientada a las salas de redacción, periodistas, ciudadanos, hackers cívicos y estudiantes de periodismo, de cómo convertir los datos en historias de relevancia social.
 
-* ``data`` -- Data files, such as those used to generate HTML.
-* ``etc`` -- Miscellaneous scripts and metadata for project bootstrapping.
-* ``jst`` -- Javascript ([Underscore.js](http://documentcloud.github.com/underscore/#template)) templates.
-* ``less`` -- [LESS](http://lesscss.org/) files, will be compiled to CSS and concatenated for deployment.
-* ``templates`` -- HTML ([Jinja2](http://jinja.pocoo.org/docs/)) templates, to be compiled locally.
-* ``www`` -- Static and compiled assets to be deployed. (a.k.a. "the output")
-* ``www/live-data`` -- "Live" data deployed to S3 via cron jobs or other mechanisms. (Not deployed with the rest of the project.)
-* ``www/test`` -- Javascript tests and supporting files.
-* ``app.py`` -- A [Flask](http://flask.pocoo.org/) app for rendering the project locally.
-* ``app_config.py`` -- Global project configuration for scripts, deployment, etc.
-* ``crontab`` -- Cron jobs to be installed as part of the project.
-* ``fabfile.py`` -- [Fabric](http://docs.fabfile.org/en/latest/) commands automating setup and deployment.
+Es un punto de encuentro y difusión con las mejores experiencias de periodismo de datos en Latinoamérica, así cómo una plataforma digital colaborativa que permite compartir experiencias entre periodistas de toda la región.
 
-Copy the template
------------------
+El proyecto se inició con un taller de escritura colaborativa con hackers, periodistas y ciudadanos a fines de agosto de 2012 en el encuentro Mediaparty de Hacks/Hackers Buenos Aires. En dicho taller se sentaron las bases para intentar resolver los problemas mencionados.
 
-```
-git clone git@github.com:nprapps/app-template.git $NEW_PROJECT_NAME
+Cómo colaborar
 
-# Optional: checkout an initial project branch
-# git checkout [init-map|init-table|init-chat]
+Se invita a todos quienes posean experiencia en análisis de datos, búsqueda de información, visualización de datos, aplicación de datos en historias periodísticas, manejos de herramientas digitales que facilitan el proceso de búsqueda y cruza de datos, conocimiento específico del marco legal y prácticas de cada país con respecto a políticas de transparencia y acceso a la información pública, etc…, a colaborar en cada uno de los contenidos del manual.
 
-cd $NEW_PROJECT_NAME
-rm -rf .git
-git init
-git add * .gitignore
-git commit -am "Initial import from app-template."
-git remote add origin git@github.com:nprapps/$NEW_PROJECT_NAME.git
-git push -u origin master
-```
+Si estás interesado en sumarte como colaborador de esta iniciativa por favor únete a nuestra lista de correo: http://bit.ly/manualperiodismodedatos y revisa nuestro blog http://periodismodedatos.tumblr.com
 
-Configure the project
----------------------
+Esta iniciativa es promovida por la Fundación Poderomedia en colaboración con periodistas, diseñadores, desarrolladores, ciudadanos y organizaciones de todo el mundo.
 
-Edit ``app_config.py`` and update ``PROJECT_NAME``, ``DEPLOYED_NAME``, ``REPOSITORY_NAME`` any other relevant configuration details.
-
-Install requirements
---------------------
-
-Node.js is required for the static asset pipeline. If you don't already have it, get it like this:
-
-```
-brew install node
-curl https://npmjs.org/install.sh | sh
-```
-
-Then install the project requirements:
-
-```
-cd $NEW_PROJECT_NAME
-npm install less universal-jst
-mkvirtualenv $NEW_PROJECT_NAME
-pip install -r requirements.txt
-```
-
-Project secrets
----------------
-
-Project secrets should **never** be stored in ``app_config.py`` or anywhere else in the repository. They will be leaked to the client if you do. Instead, always store passwords, keys, etc. in environment variables and document that they are needed here in the README.
-
-Bootstrap issues
-----------------
-
-The app-template can automatically setup your Github repo with our default labels and tickets by running ``fab bootstrap_issues``. You will be prompted for your Github username and password.
-
-Adding a template/view
-----------------------
-
-A site can have any number of rendered templates (i.e. pages). Each will need a corresponding view. To create a new one:
-
-* Add a template to the ``templates`` directory. Ensure it extends ``_base.html``.
-* Add a corresponding view function to ``app.py``. Decorate it with a route to the page name, i.e. ``@app.route('/filename.html')``
-* By convention only views that end with ``.html`` and do not start with ``_``  will automatically be rendered when you call ``fab render``. 
-
-Run the project locally
------------------------
-
-A flask app is used to run the project locally. It will automatically recompile templates and assets on demand.
-
-```
-workon $NEW_PROJECT_NAME
-python app.py
-```
-
-Visit [localhost:8000](http://localhost:8000) in your browser.
-
-Run Javascript tests
---------------------
-
-With the project running, visit [localhost:8000/test/SpecRunner.html](http://localhost:8000/test/SpecRunner.html).
-
-Compile static assets
----------------------
-
-Compile LESS to CSS, compile javascript templates to Javascript and minify all assets:
-
-```
-workon $NEW_PROJECT_NAME
-fab render 
-```
-
-(This is done automatically whenever you deploy to S3.)
-
-Test the rendered app
----------------------
-
-If you want to test the app once you've rendered it out, just use the Python webserver:
-
-```
-cd www
-python -m SimpleHTTPServer
-```
-
-Deploy to S3
-------------
-
-```
-fab staging master deploy
-```
-
-Deploy to EC2 
--------------
-
-The current configuration is for running cron jobs only. Web server configuration is not included.
-
-* In ``fabfile.py`` set ``env.deploy_to_servers`` to ``True``.
-* Optionally, set ``env.install_crontab`` to ``True``.
-* Run ``fab staging master setup`` to configure the server.
-* Run ``fab staging master deploy`` to deploy the app. 
 
